@@ -53,7 +53,7 @@ def get_balance():
         # Se a conta existir, retorna 200 balance
         return gera_response_simples(200, str(account_obj.balance))
 
-# Trata eventos 'deposit', 'transfer
+# Trata eventos 'deposit', 'withdraw' e 'transfer'
 @app.route('/event', methods=['POST'])
 def eventos():
         # Verifica se o body da requisição é do tipo json
@@ -61,7 +61,7 @@ def eventos():
             request_type = request.json.get('type')
             destination = request.json.get('destination')
             amount = request.json.get('amount')
-            if request_type == 'transfer':
+            if request_type == 'transfer' or request_type == 'withdraw':
                 origin = request.json.get('origin')
 
         # Verifica se request_type é do tipo deposit
@@ -85,8 +85,49 @@ def eventos():
                 return gera_response_json(201, 'destination', account_obj.to_json())
 
 
-        
+        # Verifica se request_type é do tipo withdraw
+        elif request_type == 'withdraw':
+            # Seleciona no banco a conta em que o saque será realizado
+            account_obj = Account.query.filter_by(id=origin).first()
+            # Se a conta não existir, retorna 404 0
+            if account_obj is None:
+                return gera_response_simples(404, '0')
+            # Caso a conta exista, então o novo saldo é a subtração do balance com o amount
+            # Necessario verificar se o saldo existente é maior que o que sera sacado [to do]
+            else:
+                account_obj.balance = account_obj.balance - amount
+                db.session.commit()
+                account_obj.id = str(account_obj.id)
 
+                return gera_response_json(201, 'origin', account_obj.to_json())
+
+        # Verifica se request_type é do tipo transfer
+        elif request_type == 'transfer':
+            # Seleciona no banco a conta em que o saque será realizado
+            account_obj = Account.query.filter_by(id=origin).first()
+            if account_obj is None:
+                return gera_response_simples(404, '0')
+            else:
+                # Remove o valor do balance da conta de origem
+                account_obj.balance = account_obj.balance - amount
+                db.session.commit()
+                
+
+                # Adiciona o valor removida da conta de origem no balance da conta de destino
+                account_dest_obj = Account.query.filter_by(id=destination).first()
+                if account_dest_obj is None:
+                    account_dest_obj = Account(id=destination, balance=amount)
+                    db.session.add(account_dest_obj)
+                    db.session.commit()
+                    account_dest_obj.id = str(account_dest_obj.id)
+                else:
+                    account_dest_obj.balance = account_dest_obj.balance + amount
+                    db.session.commit()
+                    account_dest_obj.id = str(account_dest_obj.id)
+
+                account_obj.id = str(account_obj.id)
+                
+                return gera_response_transfer_json(201, account_obj.to_json(), account_dest_obj.to_json())
 
 
 
@@ -96,6 +137,15 @@ def eventos():
 def gera_response_json(status, nome_do_conteudo, conteudo, mensagem=False):
     body = {}
     body[nome_do_conteudo] = conteudo
+    
+    if(mensagem):
+        body['mensagem'] = mensagem
+    return Response(json.dumps(body), status=status, mimetype='application/json')
+
+def gera_response_transfer_json(status, conteudo_origem, conteudo_destino, mensagem=False):
+    body = {}
+    body['origin'] = conteudo_origem
+    body['destination'] = conteudo_destino
     
     if(mensagem):
         body['mensagem'] = mensagem
