@@ -12,7 +12,7 @@ apt-get install python3
 apt-get install python3-pip
 pip install flask
 pip install flask_sqlalchemy
-pip install muysql-connector-python
+pip install mysql-connector-python
 apt-get install libmysqlclient-dev -y
 pip install mysqlclient
 ```
