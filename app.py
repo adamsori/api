@@ -116,6 +116,7 @@ def eventos():
                 # Adiciona o valor removida da conta de origem no balance da conta de destino
                 account_dest_obj = Account.query.filter_by(id=destination).first()
                 if account_dest_obj is None:
+                    # caso o destino nao exista, cria-se um novo registro com id = destination e balance=amount
                     account_dest_obj = Account(id=destination, balance=amount)
                     db.session.add(account_dest_obj)
                     db.session.commit()
@@ -126,7 +127,7 @@ def eventos():
                     account_dest_obj.id = str(account_dest_obj.id)
 
                 account_obj.id = str(account_obj.id)
-                
+
                 return gera_response_transfer_json(201, account_obj.to_json(), account_dest_obj.to_json())
 
 
@@ -142,6 +143,7 @@ def gera_response_json(status, nome_do_conteudo, conteudo, mensagem=False):
         body['mensagem'] = mensagem
     return Response(json.dumps(body), status=status, mimetype='application/json')
 
+# função criada para receber dois parametros separados, origem e destino
 def gera_response_transfer_json(status, conteudo_origem, conteudo_destino, mensagem=False):
     body = {}
     body['origin'] = conteudo_origem
@@ -151,6 +153,7 @@ def gera_response_transfer_json(status, conteudo_origem, conteudo_destino, mensa
         body['mensagem'] = mensagem
     return Response(json.dumps(body), status=status, mimetype='application/json')
 
+# seria melhor criar um parametro na função gera_response_json para verificar o tipo de resposta (erro, normal ou transfer)
 def gera_response_simples(status, conteudo):
     return Response(conteudo, status=status)
 
