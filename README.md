@@ -1,6 +1,6 @@
 # API
 
-Essa é uma API simples feita em python, flask, sqlalchemy e mysql
+Essa é uma API simples feita em python3, flask, sqlalchemy e mysql
 
 ## SETUP
 
@@ -10,11 +10,11 @@ Essa é uma API simples feita em python, flask, sqlalchemy e mysql
 apt-get install mysql-server
 apt-get install python3
 apt-get install python3-pip
-pip install flask
-pip install flask_sqlalchemy
-pip install mysql-connector-python
+pip3 install flask
+pip3 install flask_sqlalchemy
+pip3 install mysql-connector-python
 apt-get install libmysqlclient-dev -y
-pip install mysqlclient
+pip3 install mysqlclient
 ```
 
 ## EXECUÇÃO
