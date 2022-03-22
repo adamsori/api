@@ -1,5 +1,0 @@
-CREATE TABLE `account` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `balance` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1

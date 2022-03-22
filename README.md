@@ -1,24 +1,27 @@
 # API
-
-Essa é uma API simples feita em python3, flask, sqlalchemy e mysql
+Essa é uma API simples feita em python3, flask_restx, sqlalchemy e mysql
 
 ## SETUP
+É necessário o package manager [pip3](https://pip.pypa.io/en/stable/) para concluir a instalação.
 
-É necessário o package manager [pip](https://pip.pypa.io/en/stable/) para concluir a instalação.
-
+Instalar python-venv
 ```bash
-apt-get install mysql-server
-apt-get install python3
-apt-get install python3-pip
-pip3 install flask
-pip3 install flask_sqlalchemy
-pip3 install mysql-connector-python
-apt-get install libmysqlclient-dev -y
-pip3 install mysqlclient
+$ sudo apt install python3.8-venv
 ```
-
-## EXECUÇÃO
-
+Criar ambiente virtual para o projeto (executar dentro do diretório onde o repositório foi clonado)
 ```bash
-python3 app.py
+$ python3 -m venv venv
+```
+Instalar os módulos necessários (requirements.txt)
+```bash
+pip3 install -r requirements.txt
+```
+Criar uma variável de ambiente dizendo qual é o nosso aplicativo FLASK 
+```bash
+export FLASK_APP=main.py
+```
+## EXECUÇÃO
+Depois é só executar o app
+```bash
+python -m flask run
 ```
