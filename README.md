@@ -23,5 +23,5 @@ export FLASK_APP=main.py
 ## EXECUÇÃO
 Depois é só executar o app
 ```bash
-python -m flask run
+python3 -m flask run
 ```
