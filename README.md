@@ -6,11 +6,15 @@ Essa é uma API simples feita em python3, flask_restx, sqlalchemy e mysql
 
 Instalar python-venv
 ```bash
-$ sudo apt install python3.8-venv
+sudo apt install python3.8-venv
 ```
 Criar ambiente virtual para o projeto (executar dentro do diretório onde o repositório foi clonado)
 ```bash
-$ python3 -m venv venv
+python3 -m venv venv
+```
+Ativar o ambiente virtual
+```bash
+source venv/bin/activate
 ```
 Instalar os módulos necessários (requirements.txt)
 ```bash
